@@ -1,0 +1,1150 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "version": "1.0.0",
+        "description": "API for Social Media application",
+        "title": "Postaway API"
+    },
+    "servers": [
+        {
+            "url": "http://localhost:3200"
+        }
+    ],
+    "components": {
+        "securitySchemes": {
+            "jwtCookieAuth": {
+                "in": "cookie",
+                "name": "Token",
+                "type": "apiKey"
+            }
+        }
+    },
+    "paths": {
+        "/api/users/signup": {
+            "post": {
+                "tags": [
+                    "Users"
+                ],
+                "summary": "SignUp",
+                "description": "User Register",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "required": true
+                                    },
+                                    "email": {
+                                        "type": "string",
+                                        "required": true
+                                    },
+                                    "password": {
+                                        "type": "string",
+                                        "required": true
+                                    },
+                                    "gender": {
+                                        "type": "string",
+                                        "required": true,
+                                        "enum": [
+                                            "M",
+                                            "F",
+                                            "O"
+                                        ]
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "409": {
+                        "description": "Email Already Exist"
+                    },
+                    "500": {
+                        "description": "Something went wrong with the database"
+                    }
+                }
+            }
+        },
+        "/api/users/signin": {
+            "post": {
+                "tags": [
+                    "Users"
+                ],
+                "summary": "Login",
+                "description": "User login ",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "email": {
+                                        "type": "string"
+                                    },
+                                    "password": {
+                                        "type": "string"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "401": {
+                        "description": "Invalid Credentials"
+                    },
+                    "404": {
+                        "description": "No user found"
+                    },
+                    "500": {
+                        "description": "Something went wrong with the database"
+                    }
+                }
+            }
+        },
+        "/api/users/get-details/{userId}": {
+            "get": {
+                "tags": [
+                    "Users"
+                ],
+                "summary": "Get User",
+                "description": "User will get a specific User",
+                "security": [
+                    {
+                        "jwtCookieAuth": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "name": "userId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        },
+                        "description": "ID of the user to retrieve"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "404": {
+                        "description": "No user found"
+                    },
+                    "500": {
+                        "description": "Something went wrong with the database"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    }
+                }
+            }
+        },
+        "/api/users/get-all-details": {
+            "get": {
+                "tags": [
+                    "Users"
+                ],
+                "summary": "Get User",
+                "description": "User will get all users",
+                "security": [
+                    {
+                        "jwtCookieAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "404": {
+                        "description": "No user found"
+                    },
+                    "500": {
+                        "description": "Something went wrong with the database"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    }
+                }
+            }
+        },
+        "/api/users/logout": {
+            "get": {
+                "tags": [
+                    "Users"
+                ],
+                "summary": "Logout User",
+                "description": "User will logout from the device",
+                "security": [
+                    {
+                        "jwtCookieAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "500": {
+                        "description": "Something went wrong with the database"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    }
+                }
+            }
+        },
+        "/api/users/logout-all-devices": {
+            "get": {
+                "tags": [
+                    "Users"
+                ],
+                "summary": "Logout User",
+                "description": "User will logout from the all the loggedin device",
+                "security": [
+                    {
+                        "jwtCookieAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "500": {
+                        "description": "Something went wrong with the database"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    }
+                }
+            }
+        },
+        "/api/users/addavatar": {
+            "post": {
+                "tags": [
+                    "Users"
+                ],
+                "summary": "Add profile picture",
+                "description": "User will add a profile picture",
+                "security": [
+                    {
+                        "jwtCookieAuth": []
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "imageUrl": {
+                                        "type": "string",
+                                        "format": "binary",
+                                        "description": "image file to upload"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "500": {
+                        "description": "Something went wrong with the database"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "404": {
+                        "description": "No User Found"
+                    }
+                }
+            }
+        },
+        "/api/users/update-details/{userId}": {
+            "put": {
+                "tags": [
+                    "Users"
+                ],
+                "summary": "update User profile",
+                "description": "User will update the profile ",
+                "security": [
+                    {
+                        "jwtCookieAuth": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "name": "userId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        },
+                        "description": "ID of the user to retrieve"
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "imageUrl": {
+                                        "type": "string",
+                                        "format": "binary",
+                                        "description": "image file to upload"
+                                    },
+                                    "name": {
+                                        "type": "string",
+                                        "required": true
+                                    },
+                                    "gender": {
+                                        "type": "string",
+                                        "required": true,
+                                        "enum": [
+                                            "M",
+                                            "F",
+                                            "O"
+                                        ]
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "500": {
+                        "description": "Something went wrong with the database"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "404": {
+                        "description": "No User Found"
+                    }
+                }
+            }
+        },
+        "/api/posts": {
+            "get": {
+                "tags": [
+                    "Posts"
+                ],
+                "summary": "Get posts by a user",
+                "description": "User will get all posts of any user",
+                "security": [
+                    {
+                        "jwtCookieAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "500": {
+                        "description": "Something went wrong with the database"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Posts"
+                ],
+                "summary": "add post",
+                "description": "User can post ",
+                "security": [
+                    {
+                        "jwtCookieAuth": []
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "imageUrl": {
+                                        "type": "string",
+                                        "format": "binary",
+                                        "description": "image file to upload"
+                                    },
+                                    "caption": {
+                                        "type": "string"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "500": {
+                        "description": "Something Went Wrong, Please try Again"
+                    }
+                }
+            }
+        },
+        "/api/posts/all": {
+            "get": {
+                "tags": [
+                    "Posts"
+                ],
+                "summary": "Get all post",
+                "description": "User will get all posts",
+                "security": [
+                    {
+                        "jwtCookieAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "500": {
+                        "description": "Something went wrong with the database"
+                    }
+                }
+            }
+        },
+        "/api/posts/{postId}": {
+            "get": {
+                "tags": [
+                    "Posts"
+                ],
+                "summary": "Get post",
+                "description": "User will get a specific post",
+                "security": [
+                    {
+                        "jwtCookieAuth": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "name": "postId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "description": "Id for post to fetch"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "500": {
+                        "description": "Something went wrong with the database"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Posts"
+                ],
+                "summary": "delete post",
+                "description": "Delete post based on post id",
+                "security": [
+                    {
+                        "jwtCookieAuth": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "name": "postId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "description": "Id for post to delete"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Post deleted Successfully!"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "403": {
+                        "description": "Action Not Allowed"
+                    },
+                    "500":{
+                        "description":"Something went wrong with the database"
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Posts"
+                ],
+                "summary": "update post",
+                "description": "User can update a post ",
+                "security": [
+                    {
+                        "jwtCookieAuth": []
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "imageUrl": {
+                                        "type": "string",
+                                        "format": "binary",
+                                        "description": "image file to upload"
+                                    },
+                                    "caption": {
+                                        "type": "string"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "postId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "description": "Id for post to update"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "403": {
+                        "description": "Action Not Allowed"
+                    },
+                    "500": {
+                        "description": "Something went wrong with the database"
+                    },
+                    "401":{
+                        "description":"Unauthorized"
+                    }
+                }
+            }
+        },
+        "/api/comments/{postId}": {
+            "get": {
+                "tags": [
+                    "Comments"
+                ],
+                "summary": "Get comments",
+                "description": "User will get all Comments of a post",
+                "security": [
+                    {
+                        "jwtCookieAuth":[]
+                    }
+                ],
+                "parameters": [
+                    {
+                        "name": "postId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "description": "Id for post to fetch comment"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "500": {
+                        "description": "Something went wrong with the database"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Comments"
+                ],
+                "summary": "add Comment",
+                "description": "User can comment on a post ",
+                "security": [
+                    {
+                        "jwtCookieAuth":[]
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "content": {
+                                        "type": "string"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "postId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "description": "Id for post to add comment"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "500": {
+                        "description": "Something went wrong with the database"
+                    }
+                }
+            }
+        },
+        "/api/comments/{commentId}":{
+            "put": {
+                "tags": [
+                    "Comments"
+                ],
+                "summary": "update comment",
+                "description": "User can update a comment ",
+                "security": [
+                    {
+                       "jwtCookieAuth":[]
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "content": {
+                                        "type": "string"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "commentId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "description": "Id for comment to update comment"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "403": {
+                        "description": "Action Not Allowed"
+                    },
+                    "500": {
+                        "description": "Something went wrong with the database"
+                    },
+                    "401":{
+                        "description":"Unauthorized"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Comments"
+                ],
+                "summary": "delete comment",
+                "description": "Delete comment on a post",
+                "security": [
+                    {
+                       "jwtCookieAuth":[]
+                    }
+                ],
+                "parameters": [
+                    {
+                        "name": "commentId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "description": "Id for comment to delete"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Comment Deleted Successfully"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "403": {
+                        "description": "Action Not Allowed"
+                    },
+                    "500":{
+                        "description":"Something went wrong with the database"
+                    }
+                }
+            }
+        },
+        "/api/likes/{id}": {
+            "get": {
+                "tags": [
+                    "Likes"
+                ],
+                "summary": "Get likes",
+                "description": "User will get all likes on a post or comment",
+                "security": [
+                    {
+                        "jwtCookieAuth":[]
+                    }
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "description": "Id for post or comment to fetch all likes"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "404": {
+                        "description": "No post or comment found with this ID"
+                    },
+                    "500":{
+                        "description":"Something went wrong with the database"
+                    }
+                }
+            }
+        },
+        "/api/likes/toggle/{id}": {
+            "get": {
+                "tags": [
+                    "Likes"
+                ],
+                "summary": "toggle likes",
+                "description": "User will like a post or comment or remove the like",
+                "security": [
+                    {
+                        "jwtCookieAuth":[]
+                    }
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "description": "Id for post or comment to toggle likes"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "404": {
+                        "description":"No post or comment found with this ID"
+                    },
+                    "500":{
+                        "description":"Something went wrong with the database"
+                    }
+                }
+            }
+        },
+        "/api/friends/toggle-friendship/{friendId}": {
+            "get": {
+                "tags": [
+                    "Frieneds"
+                ],
+                "summary": "Toggle Friend Request",
+                "description": "User will send friend request or remove it",
+                "security": [
+                    {
+                        "jwtCookieAuth":[]
+                    }
+                ],
+                "parameters": [
+                    {
+                        "name": "friendId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "description": "Id for post or comment to toggle likes"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "404": {
+                        "description":"user Not Found"
+                    },
+                    "500":{
+                        "description":"Something went wrong with the database"
+                    },
+                    "409":{
+                        "description":"Already Friends"
+                    }
+                }
+            }
+        },
+        "/api/friends/accept-request/{friendId}": {
+            "get": {
+                "tags": [
+                    "Frieneds"
+                ],
+                "summary": "Accept friend Request",
+                "description": "User will accept friend request",
+                "security": [
+                    {
+                        "jwtCookieAuth":[]
+                    }
+                ],
+                "parameters": [
+                    {
+                        "name": "friendId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "description": "Id for post or comment to toggle likes"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "404": {
+                        "description":"user Not Found"
+                    },
+                    "500":{
+                        "description":"Something went wrong with the database"
+                    }
+                }
+            }
+        },
+        "/api/friends/reject-request/{friendId}": {
+            "get": {
+                "tags": [
+                    "Frieneds"
+                ],
+                "summary": "Reject friend Request",
+                "description": "User will reject friend request",
+                "security": [
+                    {
+                        "jwtCookieAuth":[]
+                    }
+                ],
+                "parameters": [
+                    {
+                        "name": "friendId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "description": "Id for post or comment to toggle likes"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "404": {
+                        "description":"user Not Found"
+                    },
+                    "500":{
+                        "description":"Something went wrong with the database"
+                    }
+                }
+            }
+        },
+        "/api/friends/get-friends/{userId}": {
+            "get": {
+                "tags": [
+                    "Frieneds"
+                ],
+                "summary": "Get friends",
+                "description": "User will get friendlist of a user",
+                "security": [
+                    {
+                        "jwtCookieAuth":[]
+                    }
+                ],
+                "parameters": [
+                    {
+                        "name": "userId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "description": "Id for post or comment to toggle likes"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "404": {
+                        "description":"user Not Found"
+                    },
+                    "500":{
+                        "description":"Something went wrong with the database"
+                    }
+                }
+            }
+        },
+        "/api/friends/getsent-request": {
+            "get": {
+                "tags": [
+                    "Frieneds"
+                ],
+                "summary": "Get sent friend request",
+                "description": "User will get all his sent friend-request",
+                "security": [
+                    {
+                        "jwtCookieAuth":[]
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "404": {
+                        "description":"user Not Found"
+                    },
+                    "500":{
+                        "description":"Something went wrong with the database"
+                    }
+                }
+            }
+        },
+        "/api/friends/getreceived-request": {
+            "get": {
+                "tags": [
+                    "Frieneds"
+                ],
+                "summary": "Get received friend request",
+                "description": "User will get all his received friend-request",
+                "security": [
+                    {
+                        "jwtCookieAuth":[]
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "404": {
+                        "description":"user Not Found"
+                    },
+                    "500":{
+                        "description":"Something went wrong with the database"
+                    }
+                }
+            }
+        },
+        "/api/otp/send": {
+            "post": {
+                "tags": [
+                    "OTP"
+                ],
+                "summary": "Get OTP",
+                "description": "User will get otp in email",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "email": {
+                                        "type": "string"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "500": {
+                        "description": "Something went wrong with the database"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "400":{
+                        "description":"Please Send a valid Email"
+                    }
+                }
+            }
+        },
+        "/api/otp/verify": {
+            "post": {
+                "tags": [
+                    "OTP"
+                ],
+                "summary": "Verify OTP",
+                "description": "User will verify otp",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "email": {
+                                        "type": "string"
+                                    },
+                                    "otp":{
+                                        "type":"string"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "500": {
+                        "description": "Something went wrong with the database"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "404":{
+                        "description":"user Not Found"
+                    }
+                }
+            }
+        },
+        "/api/otp/reset-password": {
+            "post": {
+                "tags": [
+                    "OTP"
+                ],
+                "summary": "Reset password",
+                "description": "User will reset the password",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "email": {
+                                        "type": "string"
+                                    },
+                                    "newPassword":{
+                                        "type":"string"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "500": {
+                        "description": "Something went wrong with the database"
+                    },
+                    "404":{
+                        "description":"Email is not present"
+                    },
+                    "400":{
+                        "description":"Verify with OTP first"
+                    }
+                }
+            }
+        }
+    }
+}

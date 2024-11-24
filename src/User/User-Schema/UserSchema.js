@@ -1,0 +1,40 @@
+import mongoose from "mongoose";
+
+export const UserSchema = new mongoose.Schema({
+    name:{
+        type:String,
+        required:true
+    },
+    email:{
+        type:String,
+        required:true,
+        unique:true
+    },
+    password:{
+        type:String,
+        required:true,
+    },
+    gender:{
+        type:String,
+        enum:["M","F","O"],
+        required:true
+    },
+    login:{
+        type:[String]
+    },
+    requestReceived:[{
+        type:mongoose.Schema.Types.ObjectId,
+        ref:'User',
+    }],
+    requestSent:[{
+        type:mongoose.Schema.Types.ObjectId,
+        ref:'User',
+    }],
+    friends:[{
+        type:mongoose.Schema.Types.ObjectId,
+        ref:'User',
+    }],
+    avatar:{
+        type:String
+    }
+});
